@@ -1,6 +1,3 @@
-from itertools import combinations
-
-
 import sys
 import math
 import bisect
@@ -8,6 +5,13 @@ from sys import stdin,stdout
 from math import gcd,floor,sqrt,log
 from collections import defaultdict as dd
 from bisect import bisect_left as bl,bisect_right as br
+
+from itertools import chain, combinations
+
+def powerset(iterable):
+    s = list(iterable)
+    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
+
 
 # faster input
 LINES = sys.stdin.read().splitlines()[::-1]
@@ -48,64 +52,60 @@ mod_division = lambda x, y: mod_multiply(x, math.pow(y, MOD - 2, MOD))
 
 in_bounds = lambda x, y, grid: x >= 0 and x < len(grid) and y >= 0 and y < len(grid[0])
 
-def subset_masks(m):
-    x = m
-    while x:
-        x -= 1
-        x &= m
-        yield x
-
 def solve():
-    # Implementation goes here.
     cases = inp()
     
     probs = []
     for i in range(cases):
         probs.append(fl())
     
-    memo = [0 for i in range(2 ** cases)]
-    for i in subset_masks(2 ** cases - 1):
-        print(i)
-        eval_prob(memo, probs, i)
+    memo = dd(int)
+    full_tuple = tuple(i for i in range(cases))
+    
+    # Generates all possible subsets (2^20 worst case).
+    all_sets = powerset(full_tuple)
+    
+    for s in all_sets:
+        if len(s) <= 2:
+            memo.update({s : 0})
+        else:
+            eval_prob(memo, probs, s)
                 
-    print(memo[-10:])
-    # from pprint import pprint
-    # pprint(memo)        
+    return memo[full_tuple]
 
-def eval_prob(memo, probs, num):
+def eval_prob(memo, probs, tup):
     
-    if memo[num] != 0:
-        return memo[num]
-    
-    tup = tuple( i for i, val in enumerate(bin(num)[2:]) if val == '1' )
+    # Stores probability that the element (key) gets eliminated.
     d = {}
+
+    # Prefix products.
     prods = 1
     opp_prods = 1
     for j in tup:
         prods *= probs[j]
         opp_prods *= (1 - probs[j])
-    
-    tot = 0
+
+    # Sum two cases (black + white elimination).
     for j in tup:
         d[j] = (prods / probs[j] * (1 - probs[j])) + (opp_prods / (1 - probs[j]) * probs[j])
-        tot += d[j]
+
+    tot = sum(d.values())
     
-    # print(e)
-    # print(f)
-    
+    # Expectation [a, b, c, d, ...] = 1 + P(a eliminated) * E[b, c, d, ...] + P(b eliminated) * E[a, c, d, ...] + ... + P(no one eliminated) * E[a, b, c, d, ...]
+    # Expectation [a, b, c, d, ...] * (1 - P(no one eliminated)) = 1 + P(a eliminated) * E[b, c, d, ...] + P(b eliminated) * E[a, c, d, ...] + ...
+    # Expectation [a, b, c, d, ...] * P(someone gets eliminated) = 1 + P(a eliminated) * E[b, c, d, ...] + P(b eliminated) * E[a, c, d, ...] + ...
+    # Expectation [a, b, c, d, ...] = (1/P(someone gets eliminated)) * (1 + P(a eliminated) * E[b, c, d, ...] + P(b eliminated) * E[a, c, d, ...] + ...)
     for i in range(len(tup)):
-        # sliced = tup[0:i] + tup[i + 1: len(tup)]
-        j = tup[i]
-        num2 = num - (2 ** j)
-        expected_sliced = eval_prob(memo, probs, num2)
-        memo[num] += d[j] * expected_sliced
-    memo[num] += 1
-    memo[num] *= 1 / tot    
-    return memo[num]
+        # Exclued the current element.
+        sliced = tup[0:i] + tup[i + 1: len(tup)]
         
-    
-    # print(memo)
+        # Get expectation of left over.
+        expected_sliced = memo[sliced]
+        j = tup[i]
+        memo[tup] += d[j] * expected_sliced
 
-    
+    memo[tup] += 1
+    memo[tup] *= 1 / tot
 
-solve()
+
+print(solve())
