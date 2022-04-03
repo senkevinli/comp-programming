@@ -12,8 +12,6 @@ def input(): return LINES.pop()
 
 # single integer
 inp = lambda: int(input())
-fl = lambda: float(input())
-
 
 # string input
 strng = lambda: input().strip()
@@ -45,39 +43,20 @@ mod_division = lambda x, y: mod_multiply(x, math.pow(y, MOD - 2, MOD))
 
 in_bounds = lambda x, y, grid: x >= 0 and x < len(grid) and y >= 0 and y < len(grid[0])
 
-from itertools import combinations
 def solve():
     # Implementation goes here.
-    nums = inp()
+    inp()
+    die = seq()
+    die.sort()
     
-    islanders = []    
-    for _ in range(nums):
-        islanders.append(inp())
-    
-    
-    pairs = list(combinations(range(nums), 2))
-    
-    smallest = sys.maxsize
-    for p in pairs:
-        excluded = [i for i in range(nums) if i not in p]
-        
-        aaa = []
-        triplets = list(combinations(excluded, 3))
-        count = 0
-        for t in triplets:
-            i1 = t[0]
-            i2 = t[1]
-            i3 = t[2]
-            
-            if islanders[i1] ^ islanders[i2] == islanders[i3]:
-                aaa.append((islanders[i1], islanders[i2], islanders[i3]))
-                count += 1
-        
-        if count == 3:
-            print(p)
-            print(aaa)
-        smallest = min(smallest, count)
-        # print(triplets)
-    print(smallest)
+    sequence = 0
 
-solve()
+    for d in die:
+        if sequence < d:
+            sequence += 1
+    return sequence
+
+cases = inp()
+
+for i in range(cases):
+    print(f'Case #{i+1}:', solve())

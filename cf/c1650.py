@@ -12,8 +12,6 @@ def input(): return LINES.pop()
 
 # single integer
 inp = lambda: int(input())
-fl = lambda: float(input())
-
 
 # string input
 strng = lambda: input().strip()
@@ -45,39 +43,36 @@ mod_division = lambda x, y: mod_multiply(x, math.pow(y, MOD - 2, MOD))
 
 in_bounds = lambda x, y, grid: x >= 0 and x < len(grid) and y >= 0 and y < len(grid[0])
 
-from itertools import combinations
 def solve():
     # Implementation goes here.
-    nums = inp()
+    n, m = mul()
     
-    islanders = []    
-    for _ in range(nums):
-        islanders.append(inp())
+    coords = []
     
+    for i in range(m):
+        x, weight = mul()
+        coords.append((weight, x, i + 1))
     
-    pairs = list(combinations(range(nums), 2))
+    coords.sort()
+    coords = coords[0:n * 2]
     
-    smallest = sys.maxsize
-    for p in pairs:
-        excluded = [i for i in range(nums) if i not in p]
+    total = 0
+    for c in coords:
+        total += c[0]
         
-        aaa = []
-        triplets = list(combinations(excluded, 3))
-        count = 0
-        for t in triplets:
-            i1 = t[0]
-            i2 = t[1]
-            i3 = t[2]
-            
-            if islanders[i1] ^ islanders[i2] == islanders[i3]:
-                aaa.append((islanders[i1], islanders[i2], islanders[i3]))
-                count += 1
-        
-        if count == 3:
-            print(p)
-            print(aaa)
-        smallest = min(smallest, count)
-        # print(triplets)
-    print(smallest)
+    print(total)
+    
+    coords.sort(key=lambda x: x[1])
+    
+    for i in range(n):
+        begin = coords[i]
+        end = coords[-(i + 1)]
+        print(f'{begin[2]} {end[2]}')
+    
+    print()
 
-solve()
+cases = inp()
+
+for _ in range(cases):
+    strng()
+    solve()

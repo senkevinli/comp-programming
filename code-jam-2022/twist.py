@@ -7,13 +7,9 @@ from collections import defaultdict as dd
 from bisect import bisect_left as bl,bisect_right as br
 
 # faster input
-LINES = sys.stdin.read().splitlines()[::-1]
-def input(): return LINES.pop()
 
 # single integer
 inp = lambda: int(input())
-fl = lambda: float(input())
-
 
 # string input
 strng = lambda: input().strip()
@@ -45,39 +41,48 @@ mod_division = lambda x, y: mod_multiply(x, math.pow(y, MOD - 2, MOD))
 
 in_bounds = lambda x, y, grid: x >= 0 and x < len(grid) and y >= 0 and y < len(grid[0])
 
-from itertools import combinations
 def solve():
-    # Implementation goes here.
-    nums = inp()
+    rooms, guesses = mul()
+    sum = 0
+    visited = set()
     
-    islanders = []    
-    for _ in range(nums):
-        islanders.append(inp())
+    start, adj = mul()
     
-    
-    pairs = list(combinations(range(nums), 2))
-    
-    smallest = sys.maxsize
-    for p in pairs:
-        excluded = [i for i in range(nums) if i not in p]
+    while True:
+        print('W')
         
-        aaa = []
-        triplets = list(combinations(excluded, 3))
-        count = 0
-        for t in triplets:
-            i1 = t[0]
-            i2 = t[1]
-            i3 = t[2]
-            
-            if islanders[i1] ^ islanders[i2] == islanders[i3]:
-                aaa.append((islanders[i1], islanders[i2], islanders[i3]))
-                count += 1
+        visited.add(start)
         
-        if count == 3:
-            print(p)
-            print(aaa)
-        smallest = min(smallest, count)
-        # print(triplets)
-    print(smallest)
+        guesses -= 1
+        next_start, next_adj = mul()
 
-solve()
+        if adj < next_adj:
+            sum += 2 * adj
+        
+        if guesses == 0:
+            break
+            
+        visited.add(start)
+
+        start = next_start
+        adj = next_adj
+        
+        visited.add(start)
+
+        for room in range(1, rooms + 1):
+            if room not in visited:
+                print('T', room)
+                guesses -= 1
+                break
+        start, adj = mul()
+
+        if guesses == 0:
+            sum += adj
+            break
+        
+    print('E', sum)
+
+cases = inp()
+
+for _ in range(cases):
+    solve()

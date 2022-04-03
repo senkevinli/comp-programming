@@ -12,8 +12,6 @@ def input(): return LINES.pop()
 
 # single integer
 inp = lambda: int(input())
-fl = lambda: float(input())
-
 
 # string input
 strng = lambda: input().strip()
@@ -45,39 +43,31 @@ mod_division = lambda x, y: mod_multiply(x, math.pow(y, MOD - 2, MOD))
 
 in_bounds = lambda x, y, grid: x >= 0 and x < len(grid) and y >= 0 and y < len(grid[0])
 
-from itertools import combinations
 def solve():
     # Implementation goes here.
-    nums = inp()
+    printers = []
     
-    islanders = []    
-    for _ in range(nums):
-        islanders.append(inp())
+    for i in range(3):
+        printers.append(seq())
     
+    min_colors = []
+    for j in range(len(printers[0])):
+        mini = math.inf
+        for i in range(len(printers)):
+            mini = min(mini, printers[i][j])
+        min_colors.append(mini)
     
-    pairs = list(combinations(range(nums), 2))
-    
-    smallest = sys.maxsize
-    for p in pairs:
-        excluded = [i for i in range(nums) if i not in p]
-        
-        aaa = []
-        triplets = list(combinations(excluded, 3))
-        count = 0
-        for t in triplets:
-            i1 = t[0]
-            i2 = t[1]
-            i3 = t[2]
-            
-            if islanders[i1] ^ islanders[i2] == islanders[i3]:
-                aaa.append((islanders[i1], islanders[i2], islanders[i3]))
-                count += 1
-        
-        if count == 3:
-            print(p)
-            print(aaa)
-        smallest = min(smallest, count)
-        # print(triplets)
-    print(smallest)
+    answer = []
+    running = 0
+    for color in min_colors:
+        added = min(color, 1000000 - running)
+        running += added
+        answer.append(str(added))
 
-solve()
+    return 'IMPOSSIBLE' if running < 1000000 else ' '.join(answer)
+        
+
+cases = inp()
+
+for i in range(cases):
+    print(f'Case #{i+1}:', solve())
