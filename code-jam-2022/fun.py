@@ -95,8 +95,6 @@ def solve():
         key = i + 1
         mapping[key].add_connection(mapping[p])
         mapping[p].add_connection_back(mapping[key])
-
-    leaves = [ node for node in mapping.values() if node.is_leaf() ]
     
     global acc
     acc = 0
@@ -105,7 +103,7 @@ def solve():
         if node.is_leaf():
             node.set_max_at(node.val)
             return
-        
+            
         for back in node.back:
             helper(back)
         
