@@ -49,10 +49,34 @@ def prefix_sum(arr):
     return arr
 
 
-def solve():
-    # Implementation goes here.
-    pass
+def determine_moves(zero_spot, arr):
+    prev = 0
+    total = 0
+    for i in range(zero_spot + 1, len(arr)):
+        moves = prev // arr[i] + 1
+        total += moves
+        
+        prev = arr[i] * moves
+    
+    prev = 0
+    for i in range(zero_spot - 1, -1, -1):
+        moves = prev // arr[i] + 1
+        total += moves
+        
+        prev = arr[i] * moves
+    
+    return total
 
-cases = inp()
-for _ in range(cases):
-    solve()
+def solve():
+    n = inp()
+    arr = seq()
+    
+    mini = math.inf
+    for i in range(n):
+        mini = min(mini, determine_moves(i, arr))
+        #print(i, mini)
+    
+    return mini
+
+print(solve())      
+

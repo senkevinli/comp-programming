@@ -53,6 +53,4 @@ def solve():
     # Implementation goes here.
     pass
 
-cases = inp()
-for _ in range(cases):
-    solve()
+print(solve())

@@ -50,9 +50,19 @@ def prefix_sum(arr):
 
 
 def solve():
-    # Implementation goes here.
-    pass
+    n = inp()
+    
+    threes = n // 3
+    leftover = n % 3
+    
+    if leftover == 0:
+        return "21" * threes
+    if leftover == 1:
+        return "1" + "21" * threes
+    return "2" + "12" * threes
+
 
 cases = inp()
+
 for _ in range(cases):
-    solve()
+    print(solve())

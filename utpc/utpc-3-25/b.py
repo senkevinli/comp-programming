@@ -48,11 +48,24 @@ def prefix_sum(arr):
         arr[i] += arr[i-1]
     return arr
 
-
+from collections import deque
 def solve():
-    # Implementation goes here.
-    pass
+    start, end = mul()
+    
+    visited = set()
+    queue = deque([(start, 0)])
+    
+    while queue:
+        cur, moves = queue.popleft()
+        
+        if cur in visited:
+            continue
+        
+        visited.add(cur)
+        if cur == end:
+            return moves
+        
+        queue.append((cur - 1, moves + 1))
+        queue.append((cur * 3, moves + 1))
 
-cases = inp()
-for _ in range(cases):
-    solve()
+print(solve())

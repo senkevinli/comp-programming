@@ -51,8 +51,11 @@ def prefix_sum(arr):
 
 def solve():
     # Implementation goes here.
-    pass
+    x1, y1, x2, y2 = seq()
+    
+    if x1 == x2 or y1 == y2:
+        return -1
+    
+    return abs(x1-x2) * abs(y1-y2)
 
-cases = inp()
-for _ in range(cases):
-    solve()
+print(solve())

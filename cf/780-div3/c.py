@@ -48,11 +48,52 @@ def prefix_sum(arr):
         arr[i] += arr[i-1]
     return arr
 
+def maxProduct(self, nums):
+    # check the edge case of an empty array
+    if not nums:
+        return 0
+    # since the array can contain negative/positive integers
+    # at each iteration, the max product could be obtained by 
+    # multiplying to a previous max or by multiplying prev min
+    # (since even number of -ve integers will be a +ve product)
+    # or by using the number itself
+    
+    i = 0
+    max_index = 0
+    local_min = local_max = global_max = nums[0]
+
+    for n in nums[1:]:
+        i += 1
+        temp = local_max # retain the previous local minimum
+
+        # compute new local max (using nums[i] with
+        # local max or local min or stand alone)
+        local_max = max(n, n*local_max, n*local_min)
+
+        # update local min
+        local_min = min(n, n*local_min, n*temp)
+        
+        if local_max > global_max:
+            global_max = local_max
+            max_index = i
+
+    return global_max, max_index
 
 def solve():
-    # Implementation goes here.
-    pass
+    sequence = strl()
+    
+    prevs = set()
+    cost = 0
+    for ch in sequence:
+        if ch in prevs:
+            cost += len(prevs) - 1
+            prevs = set()
+        else:
+            prevs.add(ch)
+    
+    return cost + len(prevs)
 
 cases = inp()
+
 for _ in range(cases):
-    solve()
+    print(solve())

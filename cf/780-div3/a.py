@@ -51,8 +51,19 @@ def prefix_sum(arr):
 
 def solve():
     # Implementation goes here.
-    pass
+    ones, twos = mul()
+    
+    if ones == 0:
+        return 1
+    
+    most_even = twos * 2 + (ones // 2) * 2 + 2
+    most_odd = twos * 2 + ((ones - 1) // 2) * 2 + 1 + 2
+    
+    return min(most_even, most_odd)
+    
+
 
 cases = inp()
+
 for _ in range(cases):
-    solve()
+    print(solve())

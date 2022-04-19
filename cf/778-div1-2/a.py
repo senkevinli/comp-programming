@@ -51,8 +51,21 @@ def prefix_sum(arr):
 
 def solve():
     # Implementation goes here.
-    pass
+    n = inp()
+    nums = seq()
+    
+    best = 0
+    best2 = 0
+    
+    for n in nums:
+        if n > best:
+            best2 = best
+            best = n
+        elif n > best2:
+            best2 = n
 
+    return best + best2
 cases = inp()
+
 for _ in range(cases):
-    solve()
+    print(solve())

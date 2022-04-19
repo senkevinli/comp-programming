@@ -50,9 +50,12 @@ def prefix_sum(arr):
 
 
 def solve():
-    # Implementation goes here.
-    pass
-
+    n = inp()
+    
+    leftover = n - 3
+    
+    return [leftover, 1, 1, 1]
 cases = inp()
+
 for _ in range(cases):
-    solve()
+    print(" ".join(list(map(str, solve()))))

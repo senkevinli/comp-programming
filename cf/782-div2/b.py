@@ -44,69 +44,55 @@ mod_division = lambda x, y: mod_multiply(x, math.pow(y, MOD - 2, MOD))
 
 in_bounds = lambda x, y, grid: x >= 0 and x < len(grid) and y >= 0 and y < len(grid[0])
 
-
-def make_trees_equal(arr, target, ones, twos):
+def flip_sequence(sequence, flip):
+    if not flip:
+        return sequence
     
-    for num in arr:
-        if num == target:
-            continue
-        
-        leftover = target - num
-        
-        twos_needed = leftover // 2
-        twos_used  = min(twos, twos_needed)
-        twos -= twos_used
-        leftover = leftover - twos_used * 2
+    return ['1' if s == '0' else '0' for s in sequence]
+
+def solve():
+    n, k = mul()
+    
+    sequence = strl()
+    moves = [0] * n
+    
+    leftover = k
+    flip = False
+    answer = []
+    for i, s in enumerate(sequence):
         
         if leftover == 0:
-            continue
+            break
         
-        if leftover > ones:
-            return False
-        
-        ones -= leftover
-    return True
+        letter = s
+        if flip:
+            letter = '1' if s == '0' else '0'
+            
+        if i == len(sequence) - 1:
+            moves[i] += leftover
+            answer.append(letter)
+            break
+        if letter == '1':
+            if leftover % 2 == 1:
+                flip = not flip
+                leftover -= 1
+                moves[i] += 1
+        else:
+            if leftover % 2 == 0:
+                flip = not flip
+                leftover -= 1
+                moves[i] += 1
+        answer.append('1')
     
-def solve():
-    elems = inp()
-    arr = seq()
-    
-    biggest = max(arr)
 
     
-    low = 0
-    high = 2 * biggest * elems + 1
-    
-    while low <= high:
-        middle = (low + high) // 2
-        
-        days = middle
-        ones = (days - 1) // 2 + 1
-        twos = days // 2
-        if make_trees_equal(arr, biggest, ones, twos):
-            high = middle - 1
-        else:
-            low = middle + 1
-            
-    
-    low2 = 0
-    high2 = 2 * biggest * elems + 1
-    
-    while low2 <= high2:
-        middle = (low2 + high2) // 2
-        
-        days = middle
-        ones = (days - 1) // 2 + 1
-        twos = days // 2
-        if make_trees_equal(arr, biggest + 1, ones, twos):
-            high2 = middle - 1
-        else:
-            low2 = middle + 1
-    
-    return min(low, low2)
+    flip = k % 2 != 0
+    best = answer + flip_sequence(sequence[len(answer):], flip)
+    print(''.join(best))
+    print(" ".join(map(str, moves)))
     
 
 cases = inp()
 
 for _ in range(cases):
-    print(solve())
+    solve()

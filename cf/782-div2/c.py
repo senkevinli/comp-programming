@@ -50,9 +50,29 @@ def prefix_sum(arr):
 
 
 def solve():
-    # Implementation goes here.
-    pass
+    
+    n, a, b = mul()
+    sequence = seq()
+
+    diff = []
+    for i in range(len(sequence)):
+        if i == 0:
+            diff.append(sequence[i])
+            continue
+        diff.append(sequence[i] - sequence[i-1])
+    
+    multiplier = len(diff)
+    cost = 0
+    for d in diff:
+        cost += d * b
+        multiplier -= 1
+        counted = multiplier * b
+        added = min(counted, a) * d
+        cost += added
+
+    return cost
+        
 
 cases = inp()
 for _ in range(cases):
-    solve()
+    print(solve())

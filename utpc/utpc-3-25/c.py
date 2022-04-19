@@ -49,10 +49,21 @@ def prefix_sum(arr):
     return arr
 
 
+def det_winner(moves):
+    return 'Jack Sparrow' if moves % 2 == 1 else 'Davy Jones'
 def solve():
     # Implementation goes here.
-    pass
+    n = inp()
+    nums = seq()
+    
+    mini = min(nums)
+    maxi = max(nums)
+    
+    gcd = mini
+    for num in nums:
+        gcd = math.gcd(gcd, num)
 
-cases = inp()
-for _ in range(cases):
-    solve()
+    print(det_winner(maxi // gcd - len(nums)))
+
+
+solve()

@@ -50,9 +50,44 @@ def prefix_sum(arr):
 
 
 def solve():
+    n, m = mul()
+    
+    grid = []
+    
+    for _ in range(n):
+        grid.append(strl())
+    
+    if grid[0][0] == '1':
+        print(-1)
+        return
+    
+    ret = []
+    moves = 0
+    
+    for i in reversed(range(n)):
+        for j in reversed(range(1, m)):
+            if grid[i][j] == '0':
+                continue
+            
+            moves += 1
+            ret.append((i + 1, j, i + 1, j + 1))
+    
+    for i in reversed(range(1, n)):
+        if grid[i][0] == '0':
+            continue
+        moves += 1
+        ret.append((i, 1, i + 1, 1))
+    
+    assert moves < n * m
+    print(moves)
+    
+    for r in ret:
+        print(*r)
+    
     # Implementation goes here.
     pass
 
 cases = inp()
+
 for _ in range(cases):
     solve()

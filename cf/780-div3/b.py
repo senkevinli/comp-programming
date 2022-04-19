@@ -50,9 +50,26 @@ def prefix_sum(arr):
 
 
 def solve():
-    # Implementation goes here.
-    pass
+    elems = inp()
+    arr = seq()
+    
+    if elems == 1:
+        return arr[0] == 1
+    
+    best = 0
+    best2 = 0
+    
+    for elem in arr:
+        if elem > best:
+            best2 = best
+            best = elem
+        elif elem > best2:
+            best2 = elem
+
+    return abs(best - best2) <= 1
+
 
 cases = inp()
+
 for _ in range(cases):
-    solve()
+    print('YES' if solve() else 'NO')

@@ -51,8 +51,16 @@ def prefix_sum(arr):
 
 def solve():
     # Implementation goes here.
-    pass
+    n, r, b = mul()
+    
+    dividers = b + 1
+    streaks = r // dividers
+    leftover = r % dividers
+    
+    red_wins = ['R' * (streaks + 1)] * (leftover) + ['R' * (streaks)] * (dividers - leftover)
+    return 'B'.join(red_wins)
+    
 
 cases = inp()
 for _ in range(cases):
-    solve()
+    print(solve())

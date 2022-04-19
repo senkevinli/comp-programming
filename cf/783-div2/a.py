@@ -50,9 +50,28 @@ def prefix_sum(arr):
 
 
 def solve():
-    # Implementation goes here.
-    pass
+    n, m = mul()
+    
+    rows = n - 1
+    cols = m - 1
+    
+    if rows == 0 and cols == 0:
+        return 0
+    if (rows == 0 and cols == 1) or (rows == 1 and cols == 0):
+        return 1
+    
+    
+    square = min(rows, cols)
+
+    if square == 0:
+        return - 1
+    leftover = max(rows, cols) - square
+    
+    
+    maxi = max(rows, cols)
+
+    return square * 2 + leftover + (leftover // 2) * 2
 
 cases = inp()
 for _ in range(cases):
-    solve()
+    print(solve())

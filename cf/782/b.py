@@ -5,6 +5,7 @@ from sys import stdin,stdout
 from math import gcd,floor,sqrt,log
 from collections import defaultdict as dd
 from bisect import bisect_left as bl,bisect_right as br
+from typing import Counter
 
 # faster input
 LINES = sys.stdin.read().splitlines()[::-1]
@@ -51,8 +52,25 @@ def prefix_sum(arr):
 
 def solve():
     # Implementation goes here.
-    pass
+    length = inp()
+    
+    arr = seq()
+    
+    freq = 0
+    counter = {}
+    for a in arr:
+        if a not in counter:
+            counter[a] = [0]
+        counter[a][0] += 1
+        freq = max(freq, counter[a][0])
+
+    copies = math.ceil(log(length / freq, 2))
+    swaps = length - freq
+    
+    return copies + swaps
+
 
 cases = inp()
+
 for _ in range(cases):
-    solve()
+    print(solve())

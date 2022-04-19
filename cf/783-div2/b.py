@@ -6,7 +6,6 @@ from math import gcd,floor,sqrt,log
 from collections import defaultdict as dd
 from bisect import bisect_left as bl,bisect_right as br
 
-
 # faster input
 LINES = sys.stdin.read().splitlines()[::-1]
 def input(): return LINES.pop()
@@ -44,69 +43,56 @@ mod_division = lambda x, y: mod_multiply(x, math.pow(y, MOD - 2, MOD))
 
 in_bounds = lambda x, y, grid: x >= 0 and x < len(grid) and y >= 0 and y < len(grid[0])
 
+def prefix_sum(arr):
+    for i in range(1, len(arr)):
+        arr[i] += arr[i-1]
+    return arr
 
-def make_trees_equal(arr, target, ones, twos):
-    
-    for num in arr:
-        if num == target:
-            continue
-        
-        leftover = target - num
-        
-        twos_needed = leftover // 2
-        twos_used  = min(twos, twos_needed)
-        twos -= twos_used
-        leftover = leftover - twos_used * 2
-        
-        if leftover == 0:
-            continue
-        
-        if leftover > ones:
-            return False
-        
-        ones -= leftover
-    return True
-    
+
 def solve():
-    elems = inp()
+    peeps, chairs = mul()
     arr = seq()
+    if chairs <= peeps:
+        return False
     
-    biggest = max(arr)
+    leftover = chairs - peeps
+    
+    arr.sort(reverse=True)
+    
+    left = right = 0
+    idx = 0
+    
+    fill_left = True
+    while idx < len(arr):
 
-    
-    low = 0
-    high = 2 * biggest * elems + 1
-    
-    while low <= high:
-        middle = (low + high) // 2
-        
-        days = middle
-        ones = (days - 1) // 2 + 1
-        twos = days // 2
-        if make_trees_equal(arr, biggest, ones, twos):
-            high = middle - 1
-        else:
-            low = middle + 1
+        if idx == 0:
+            left = arr[idx]
+            right = arr[idx]
             
-    
-    low2 = 0
-    high2 = 2 * biggest * elems + 1
-    
-    while low2 <= high2:
-        middle = (low2 + high2) // 2
+            leftover -= left
+            leftover -= right
+            idx += 1
+            continue
         
-        days = middle
-        ones = (days - 1) // 2 + 1
-        twos = days // 2
-        if make_trees_equal(arr, biggest + 1, ones, twos):
-            high2 = middle - 1
+        cur = arr[idx]
+        
+        if fill_left:
+            left = cur
+            leftover -= left
+            fill_left = False
         else:
-            low2 = middle + 1
+            right = cur
+            leftover -= right
+            fill_left = True
+            
+        idx += 1
     
-    return min(low, low2)
+    leftover += min(left, right)
+    
+    return leftover >= 0
+        
     
 
 cases = inp()
-
 for _ in range(cases):
-    print(solve())
+    print('YES' if solve() else 'NO')
