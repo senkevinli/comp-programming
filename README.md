@@ -1,1 +1,1 @@
-# competitive-programming-2
+# Collection of Competitive Programming Problems
