@@ -31,6 +31,7 @@ mulf = lambda: map(float,input().strip().split())
 
 # list of multiple integers
 seq = lambda: list(map(int,input().strip().split()))
+fl_seq = lambda: list(map(float,input().strip().split()))
 
 ceil = lambda x: int(x) if(x==int(x)) else int(x)+1
 ceildiv = lambda x,d: x//d if(x%d==0) else x//d+1
@@ -43,14 +44,8 @@ mod_division = lambda x, y: mod_multiply(x, math.pow(y, MOD - 2, MOD))
 
 in_bounds = lambda x, y, grid: x >= 0 and x < len(grid) and y >= 0 and y < len(grid[0])
 
-def prefix_sum(arr):
-    for i in range(1, len(arr)):
-        arr[i] += arr[i-1]
-    return arr
-
-
 def solve():
-    # Implementation goes here.
+    # Implemaentation goes here.
     pass
 
 cases = inp()
